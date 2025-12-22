@@ -11,7 +11,9 @@ add_executable(AsyncNet
     src/handlers/handler.cpp
     src/logging/logger.cpp
     src/utils/utils.cpp
-    src/tests/tests.cpp
+    src/tests/tests_assert.cpp
+    src/tests/tests_handlers.cpp
+    src/tests/tests_sessions.cpp
     )
 
 target_include_directories(AsyncNet PUBLIC

@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 #include "../handlers/handler.h"
+#include "../http_server/server.h"
 #include "../utils/utils.h"
 
 namespace tests {
@@ -72,23 +73,54 @@ namespace tests {
                 std::abort ();
             }
         }
-    #define ASSERT_EQUAL(a, b) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, "")
-    #define ASSERT_EQUAL_HINT(a, b, hint) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, (hint))
+        #define ASSERT_EQUAL(a, b) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, "")
+        #define ASSERT_EQUAL_HINT(a, b, hint) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, (hint))
 
-    void AssertImpl (bool value, const std::string& value_str, const std::string& file_name
-                        , const std::string& func_name, unsigned number_line, const std::string& hint);
-    #define ASSERT(exp) AssertImpl(!!(exp), #exp, __FILE__, __FUNCTION__, __LINE__, "")
-    #define ASSERT_HINT(exp, hint) AssertImpl(!!(exp), #exp, __FILE__, __FUNCTION__, __LINE__, (hint))
+        inline void AssertImpl (bool value, const std::string& value_str, const std::string& file_name
+                                        , const std::string& func_name, unsigned number_line, const std::string& hint) {
+            if(!value) {
+                std::cerr << std::boolalpha;
+                std::cerr << file_name << "(" << number_line << "): " << func_name << ": ";
+                std:: cerr << "ASSERT(" << value_str << ") failed.";
+
+                if(!hint.empty ()) {
+                    std::cerr << " Hint: " << hint;
+                }
+                std::cerr<<std::endl;
+                std::abort ();
+            }                    
+        }
+        #define ASSERT(exp) AssertImpl(!!(exp), #exp, __FILE__, __FUNCTION__, __LINE__, "")
+        #define ASSERT_HINT(exp, hint) AssertImpl(!!(exp), #exp, __FILE__, __FUNCTION__, __LINE__, (hint))
 
         template <typename TestFunc>
         void RunTestImpl(const TestFunc& func, const std::string& test_name) {
             func();
             std::cerr<< "Testing " + test_name + " is successfully" << std::endl;
         }
-    #define RUN_TEST(func) RunTestImpl(func, #func)
+        #define RUN_TEST(func) RunTestImpl(func, #func)
+    
+        // Создаем наследник для тестирования базового класса
+        class TestBaseSession : public http_server::BaseSession {
+        public:
+            const auto& TestBaseOnRead(int client_fd) {
+                SetClientFd(client_fd);
+                OnReadRequest();
+                return GetRuquest();
+            }
+
+            void TestOnWriteResponse(int client_fd, utils::Response&& response) {
+                SetClientFd(client_fd);
+                OnWriteResponse(std::forward<decltype(response)>(response));
+            }
+
+        private:
+            int Run(int client_fd) override {
+                return 0;
+            }
+        };
 
     } // namespace detail
 
-    void TestHttpServer();
 
 } // namespace tests

@@ -1,16 +1,27 @@
 #pragma once
 
+#include <fstream>
 #include <string>
 #include <string_view>
 #include <map>
+#include <unordered_set>
 
 namespace utils {
+    static const std::unordered_set<char> escapes = {
+        '\n', '\t', '\r', '\b', '\f', '\v', '\\', '\"', '\'',
+        '\0', '\a', '\e'
+    };
 
     inline unsigned FULL_COUNT_CONNECTION = 0;
     inline unsigned CURRENT_COUNT_CONNECTION = 0;
     inline bool SHUTDOWN_REQUESTED = false;
 
     std::string GetCurrentTime();
+    std::string GetDocument(std::string path);
+
+    size_t GetFileSize(std::fstream& file);
+
+    bool StrOnlyEscapeSequences(std::string str);
 
     struct HttpRequest{
         std::string method;
@@ -51,9 +62,3 @@ namespace utils {
     };
 
 } // namespace utils
-
-namespace endpoints {
-    constexpr std::string_view TIME_REQ = "/time";
-    constexpr std::string_view STAT_REQ = "/stats";
-    constexpr std::string_view SHOUTDOWN_REQ = "/shutdown";
-} // namespace endpoints

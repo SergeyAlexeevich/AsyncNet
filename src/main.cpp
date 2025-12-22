@@ -8,7 +8,7 @@
 #include "http_server/server.h"
 #include "handlers/handler.h"
 #include "logging/logger.h"
-#include "tests/tests.h"
+#include "tests/tests_sessions.h"
 
 using namespace std::string_literals;
 
@@ -37,7 +37,7 @@ int main(int argc, const char* argv[]) {
     }
 
     // Запускаем тесты
-    tests::TestHttpServer();
+ //   tests::TestHttpServer();
 
     // 1. Создаем структуру адреса
     struct sockaddr_in server_addr;

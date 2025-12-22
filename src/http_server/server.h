@@ -134,10 +134,7 @@ using namespace std::string_literals;
 
         std::string CreateResponse(const utils::Response& response) const {
             // Формирование HTTP-ответа
-            std::string body = /*std::string("<html>\n") +
-                           "<body>\n" +*/
-                            response.body + "\n" /*+
-                            "</body>\n"*/;
+            std::string body = response.body + "\n";
 
             std::string head = std::string("HTTP/") + http_request_.http_version + " " + response.code + " " + response.status + std::string("\r\n") +
                             "Content-Type: " + response.content_type +"; charset=UTF-8\r\n" +
@@ -213,7 +210,6 @@ using namespace std::string_literals;
             if (bind(listen_fd_, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1) {
                 logger::LogErr ("Ошибка привязки сокета ( " + std::string(__FILE__) + std::to_string (__LINE__) + " )");
                 close(listen_fd_);
-                //return 1;
                 throw std::logic_error("Error connections socket"s);
             }
 
