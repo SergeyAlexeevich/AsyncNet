@@ -65,7 +65,7 @@ namespace handler {
                 } else if(req.uri == endpoints::VECTOR_IMPL) {
                     resp.code = "200";
                     resp.status = "OK";
-                    std::string buf = utils::GetDocument("/home/sergey/TESTS/NDM_Systems/AsyncNet/static/vector.txt");
+                    std::string buf = utils::GetDocument("/home/sergey/Work/AsyncNet/static/vector.txt");
                     resp.body = buf;
                     send(resp);
                 } else {
