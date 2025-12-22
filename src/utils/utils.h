@@ -16,6 +16,9 @@ namespace utils {
     inline unsigned CURRENT_COUNT_CONNECTION = 0;
     inline bool SHUTDOWN_REQUESTED = false;
 
+    std::string DetectLanguage(const std::string& filepath);
+    std::string GenerateHtmlResponse(const std::string& code, const std::string& language);
+    // std::string GenerateHtmlResponse(const std::string& code, const std::string& language, const std::string& filepath = "");
     std::string GetCurrentTime();
     std::string GetDocument(std::string path);
 

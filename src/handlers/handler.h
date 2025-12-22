@@ -65,7 +65,8 @@ namespace handler {
                 } else if(req.uri == endpoints::VECTOR_IMPL) {
                     resp.code = "200";
                     resp.status = "OK";
-                    std::string buf = utils::GetDocument("/home/sergey/Work/AsyncNet/static/vector.txt");
+                    std::string path("/home/sergey/Work/AsyncNet/static/vector.h");
+                    std::string buf = utils::GenerateHtmlResponse(utils::GetDocument(path), utils::DetectLanguage(path));
                     resp.body = buf;
                     send(resp);
                 } else {
